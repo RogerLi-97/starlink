@@ -30,6 +30,7 @@ class SatSettingForm extends Component {
                                     message: "Please input your Longitude",
                                 }
                             ],
+                            initialValue: 70
                         })(<InputNumber
                             min={-180}
                             max={180}
@@ -50,6 +51,7 @@ class SatSettingForm extends Component {
                                     message: "Please input your Latitude",
                                 }
                             ],
+                            initialValue: -40
                         })(<InputNumber
                             placeholder="Please input Latitude"
                             min={-90}
@@ -68,6 +70,7 @@ class SatSettingForm extends Component {
                                     message: "Please input your Elevation",
                                 }
                             ],
+                            initialValue: 100
                         })(<InputNumber
                             placeholder="Please input Elevation"
                             min={-413}
@@ -86,6 +89,7 @@ class SatSettingForm extends Component {
                                     message: "Please input your Altitude",
                                 }
                             ],
+                            initialValue: 90
                         })(<InputNumber
                             placeholder="Please input Altitude"
                             min={0}
@@ -104,6 +108,7 @@ class SatSettingForm extends Component {
                                     message: "Please input your Duration",
                                 }
                             ],
+                            initialValue: 10
                         })(<InputNumber
                             placeholder="Please input Duration"
                             min={0}
@@ -128,15 +133,15 @@ class SatSettingForm extends Component {
     }
 
     showSatellite = e => {
-        e.preventDefault(); // 阻止html默认的Form的submit事件的触发
-        console.log('clicked');
-        // e.preventDefault();
-        // this.props.form.validateFields((err, values) => {
-        //     if (!err) {
-        //         // console.log('Received values of form: ', values);
-        //         this.props.onShow(values);
-        //     }
-        // });
+        // e.preventDefault(); // 阻止html默认的Form的submit事件的触发，阻止页面跳转
+        // console.log('clicked');
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                // console.log('Received values of form: ', values);
+                this.props.onShow(values);
+            }
+        });
     }
 
 }

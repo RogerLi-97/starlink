@@ -1,17 +1,67 @@
 import React, {Component} from 'react';
-import { Row, Col } from 'antd';
+import {Row, Col} from 'antd';
+import axios from "axios";
 
 import SatSetting from "./SatSetting";
+import SatelliteList from "./SatelliteList";
+import {NEARBY_SATELLITE, SAT_API_KEY, STARLINK_CATEGORY} from "../constants";
 
 class Main extends Component {
+    constructor() {
+        super();
+        this.state = {
+            satInfo: null,
+            settings: null,
+            isLoadingList: false
+        };
+    }
+
+    showNearbySatellite = (setting) => {
+        console.log(setting);
+        this.setState({
+            settings: setting
+        })
+        this.fetchSatellite(setting);
+    }
+
+    fetchSatellite = (setting) => {
+        // step 1: abstract api parameters from the setting
+        const {latitude, longitude, elevation, altitude} = setting;
+
+        // step 2: send request to fetch data
+        const url = `/api/${NEARBY_SATELLITE}/${latitude}/${longitude}/${elevation}/${altitude}/${STARLINK_CATEGORY}/&apiKey=${SAT_API_KEY}`;
+
+        // step 3: add spin
+        this.setState({
+            isLoadingList: true
+        });
+
+        axios.get(url)
+            .then(response => {
+                console.log(response.data)
+                // step 4: remove spin
+                this.setState({
+                    satInfo: response.data,
+                    isLoadingList: false
+                })
+            })
+            .catch(error => {
+                console.log('err in fetch satellite -> ', error);
+            })
+    }
+
     render() {
+        const {satInfo, isLoadingList} = this.state;
         return (
             <Row className="main">
                 <Col
                     span={8}
                     className="left-side"
                 >
-                    <SatSetting/>
+                    <SatSetting onShow={this.showNearbySatellite}/>
+                    <SatelliteList satInfo={satInfo}
+                                   isLoad={isLoadingList}
+                    />
                 </Col>
                 <Col
                     span={16}
